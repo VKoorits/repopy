@@ -13,7 +13,7 @@ def get_quote():
         json_quote = json.loads(quote_obj.content.decode())
         quote = json_quote['quoteText']
         if json_quote['quoteAuthor'] != "":
-            quote = quote + "<br></h1><h3>***" + json_quote['quoteAuthor'] + "***</h3><h1>"
+            quote = quote + "\n***" + json_quote['quoteAuthor'] + "***"
         return quote
     except Exception:
         return "что-то не припомню ни одной цитаты"
