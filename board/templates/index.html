@@ -1,0 +1,192 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>CTF</title>
+    <style>
+      body {
+        overflow: auto;
+        margin: 0;
+        background-color: #e0e0e0;
+      }
+      .top_div {
+        position: fixed; /* Фиксированное положение */
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        height: 60px;
+        background-color: white;
+        text-align: right;
+        padding-left: : 10px;
+        padding-right: 15px;
+        border-bottom: 2px solid #e0e0e0;
+        z-index: 2;
+      }
+      .top_name_ctf{
+        float: left;
+      }
+      .margin_maker {
+        margin-left: 10px;
+        margin-right: 15px;
+        margin-top: 0px;
+      }
+      .flag_field {
+        position: relative;
+        top: 0px;
+        background-color: white;
+        height: 130px;
+        padding-left: 20px;
+        padding-top: 5px;
+        color: grey;
+      }
+      .tasks {
+        z-index: 1;
+        padding: 0px;
+        position: relative; /* Фиксированное положение */
+        top: 80px;
+        margin-left: 100px;
+        margin-right: 80px;
+        padding: 10px;
+      }
+      .one_task {
+        padding: 10px;
+        margin: 10px;
+        color: #222222;
+        background-color: #f2f2f2;
+        width: 160px;
+        height: 90px;
+        display: inline-block;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .grey_cloud {
+        position:fixed;
+        top:0px;
+        left:0px;
+        right: 0px;
+        bottom: 0px;
+        z-index: 3;
+        opacity: 0.6;
+     	  background: #444444;
+        display: none;
+      }
+      .task_text {
+        padding-top: 15px;
+        padding-left: 50px;
+        padding-right: 50px;
+        background-color: white;
+        border: 2px solid #e0e0e0;
+        width: 550px;
+        height: 350px;
+        z-index: 5;
+        text-align: left;
+        display: none;
+      }
+      hr {
+        color: #333333;
+      }
+      button {
+        background: #81C869;
+        height: 32px;
+        border: 1px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      input {
+        border-radius: 0px;
+        border: 2px solid #e0e0e0;
+        height: 30px;
+      }
+      code {
+        font-size: 18px;
+        background-color: #f0f8ff;
+      }
+    </style>
+    <script>
+      function close_task(obj) {
+          document.getElementById('grey_cloud').style.display = 'none';
+          document.getElementById(obj.id+'task').style.display = 'none';
+        }
+      function open_task(obj) {
+      document.getElementById('grey_cloud').style.display = 'block';
+      document.getElementById(obj.id+'_task').style.display = 'block';
+    }
+    </script>
+
+</head>
+<body>
+  {% if user.is_authenticated %}
+    <div class="grey_cloud" id="grey_cloud"></div>
+    <div>
+      <div class="top_div">
+        <div class="margin_maker">
+          <h1 class="top_name_ctf"> SomeCTF</h1>
+        </div>
+          <h1>{{user}} | SCORE: {{score}}</h1>
+      </div>
+      <div style="z-index: 3;  red;position:fixed; left:0px; top:35px; right:0px;">
+        <center>
+          {% for val in data %}
+            {% for task in val.tasks %}
+              <div class="task_text" id='{{task.name}}_task'>
+                {{ task.name }}
+                <hr>
+                <div style="height: 250px">
+                  {{ task.text }}
+                </div>
+              <hr>
+              <button style="float:right;" id="{{task.name}}_" onclick="close_task(this)" >закрыть</button>
+            </div>
+            {% endfor %}
+          {% endfor %}
+        </center>
+      </div>
+        <div class="tasks">
+          <div class="flag_field">
+            <h3>
+              ВВОД ФЛАГА
+            </h3>
+              Правильным флагом является строка вида
+              <code>SomeCTF{&lt;flag&gt;}</code>, где &lt;flag&gt;
+              - набор [a-zA-Zа-яА-Я0-9@_!].
+              <br>
+            <form action="#" method="POST">
+              {% csrf_token %}
+              <input name="flag" placeholder="     SomeSTF{...}">
+              <button>отправить</button>
+              <span>{{msg}}</span>
+            </form>
+          </div>
+          {% for val in data %}
+            <div style="color:#555555">
+              <h2>{{ val.category }}</h2>
+              {{ val.description }}<br>
+            </div>
+            {% for task in val.tasks %}
+              <div class="one_task"
+                {% if task.done %}
+                  style="background-color: #81C869;"
+                {% endif %}
+                id='{{task.name}}' onclick="open_task(this);" >
+                <span>{{ task.name }}</span><br>
+                <h2>{{ task.price }}</h2>
+              </div>
+            {% endfor %}
+          {% endfor %}
+          <hr>
+          <center><a href="/logout">Выход</a></center>
+      </div>
+  {% else %}
+  <center>
+      <div style="height:120px;"></div>
+      <div style="top 200px;">
+        <a href="/login">Вход</a>
+        <br>
+        <a href="/register">Регистрация</a>
+      <div>
+    </center>
+  {% endif %}
+</body>
+</html>
