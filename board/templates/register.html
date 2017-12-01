@@ -3,22 +3,132 @@
   <head>
     <title>Регистрация</title>
     <style>
-      body {
-        overflow: auto;
-        margin: 0;
-        background-color: #e0e0e0;
-        color: #555555;
-      }
+    body {
+      overflow: auto;
+      margin: 0;
+      background-color: #e0e0e0;
+      color: #555555;
+    }
+    .top_div {
+      position: fixed; /* Фиксированное положение */
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      height: 60px;
+      background-color: white;
+      text-align: right;
+      padding-left: : 10px;
+      padding-right: 15px;
+      border-bottom: 2px solid #e0e0e0;
+      z-index: 2;
+    }
+    .top_name_ctf{
+      float: left;
+    }
+    .margin_maker {
+      margin-left: 10px;
+      margin-right: 15px;
+      margin-top: 0px;
+    }
+    button {
+      background: #81C869;
+      height: 32px;
+      border: 1px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    input {
+      border-radius: 0px;
+      border: 2px solid #e0e0e0;
+      height: 30px;
+    }
     </style>
+    <script>
+      function open_help(){
+          document.getElementById('reg').style.display = 'none';
+          document.getElementById('help').style.display = 'block';
+      }
+      function close_help(){
+          document.getElementById('reg').style.display = 'block';
+          document.getElementById('help').style.display = 'none';
+      }
+    </script>
   </head>
   <body>
+    <div class="top_div">
+      <div class="margin_maker">
+        <h1 class="top_name_ctf"> SomeCTF</h1>
+      </div>
+    </div>
+    <div style="height:100px;"></div>
+    <center>
+      <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
+        <div style="background-color: white; text-align: left; display: none;  width: 480px; padding: 10px;
+        padding-left: 30px" id="help">
+          <span class="helptext">
+            <ul>
+              <li>Логин должен содержать не более 150 символов. Только буквы, цифры и символы '@' и '_'
+              <li>Ваш пароль не должен совпадать с вашим именем или другой персональной информацией или быть слишком похожим на неё.</li>
+              <li>Ваш пароль должен содержать как минимум 8 символов.</li>
+              <li>Ваш пароль не может быть одним из широко распространённых паролей.</li><li>Ваш пароль не может состоять только из цифр.</li>
+            </ul> </span>
+            <input type="button" value="закрыть" onclick="close_help()">
+        </div>
+
+        <div style="text-align: right; width: 500px; padding-right: 100px;" id="reg">
+          <h1>Мы рады видеть тебя на SomeCTF</h1>
+          <form action="" method="post">
+            {% csrf_token %}
+            <label for="id_username">Имя пользователя:</label>
+            <input type="text" name="username" maxlength="150" id="id_username" required autofocus />
+            <br><br>
+            <label for="id_password1">Пароль:</label>
+            <input type="password" name="password1" required id="id_password1" />
+            <br><br>
+            <label for="id_password2">Подтверждение пароля:</label>
+            <input type="password" name="password2" required id="id_password2" />
+            <br><br>
+            <a href="/login">Вход</a>
+            <input type="button" value = "проблемы с регистрацией" onclick="open_help()">
+            <button type="submit">Зарегистрироваться</button>
+
+          </form>
+        </div>
+      </div>
+
+    </center>
+
+
+    </form>
+  </body>
+</html>
+
+    <!--
     <center>
       <h1>Мы рады видеть тебя на SomeCTF</h1>
     </center>
     <form action="" method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Зарегистрироваться</button><a href="/login">Вход</a>
-    </form>
-  </body>
-</html>
+      <label for="id_username">Имя пользователя:</label>
+      <input type="text" name="username" maxlength="150" id="id_username" required autofocus />
+      <span class="helptext">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</span>
+      <br>
+      <label for="id_password1">Пароль:</label>
+      <input type="password" name="password1" required id="id_password1" />
+
+      <br>
+      <label for="id_password2">Подтверждение пароля:</label>
+      <input type="password" name="password2" required id="id_password2" />
+      <br>
+      <a href="/login">Вход</a>
+      <button type="submit">Зарегистрироваться</button>
+
+      <span class="helptext">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</span>
+      <span class="helptext">
+        <ul>
+          <li>Ваш пароль не должен совпадать с вашим именем или другой персональной информацией или быть слишком похожим на неё.</li>
+          <li>Ваш пароль должен содержать как минимум 8 символов.</li>
+          <li>Ваш пароль не может быть одним из широко распространённых паролей.</li><li>Ваш пароль не может состоять только из цифр.</li>
+        </ul> </span>
+      <span class="helptext">Для подтверждения введите, пожалуйста, пароль ещё раз.</span>
+    -->

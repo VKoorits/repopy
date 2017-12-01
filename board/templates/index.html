@@ -35,7 +35,7 @@
         position: relative;
         top: 0px;
         background-color: white;
-        height: 130px;
+        height: 145px;
         padding-left: 20px;
         padding-top: 5px;
         color: grey;
@@ -179,14 +179,20 @@
           <center><a href="/logout">Выход</a></center>
       </div>
   {% else %}
+  <div class="top_div">
+    <div class="margin_maker">
+      <h1 class="top_name_ctf"> SomeCTF</h1>
+    </div>
+  </div>
+  <div style="height:100px;"></div>
   <center>
-      <div style="height:120px;"></div>
-      <div style="top 200px;">
-        <a href="/login">Вход</a>
-        <br>
-        <a href="/register">Регистрация</a>
-      <div>
-    </center>
+    <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
+      <h1>Мы рады видеть тебя на SomeCTF</h1>
+      <button onclick="window.location = '/login';" style="width: 25%;">Вход</button>
+      <button onclick="window.location = '/register';" style="width: 25%;">Регистрация</button>
+    </div>
+  </center>
+  <center>
   {% endif %}
 </body>
 </html>

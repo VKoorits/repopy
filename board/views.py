@@ -34,7 +34,7 @@ class LogoutView(View):
         return HttpResponseRedirect("/")
 
 
-#SomeCTF{0k_y0u_can_us3_4r3p_program}
+
 def main_page(request):
 	msg=""
 	
@@ -86,67 +86,4 @@ def main_page(request):
 				})
 
 	return render(request, 'index.html', {"data" : tasks, "user":request.user, "msg":msg, "score":score})
-"""
 
-t = [
-    {
-        "category":"WEB",
-        "description":"Задачи связанные с веб-приложениями",
-        "tasks" : [
-            {
-            "name": "first task WEB",
-            "price": 100,
-            "text": "This is text for first task WEB1",
-            "done": True
-            },
-            {
-            "name": "first task PPC",
-            "price": 200,
-            "text": "This is text for first task PPC",
-            "done": False
-            }
-        ]
-
-    },
-    {
-        "category":"Crypto",
-        "description":"Задачи на использование теории криптографии",
-        "tasks" : [
-            {
-            "name": "first task WEB",
-            "price": 100,
-            "text": "This is text for first task WEB1",
-            "done": False
-            },
-            {
-            "name": "first task PPC",
-            "price": 200,
-            "text": "This is text for first task PPC",
-            "done": False
-            }
-        ]
-
-    }
-]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
