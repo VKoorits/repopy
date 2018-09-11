@@ -92,7 +92,7 @@ def main_page(request):
 def score_page(request):
     tasks = models.Task.objects.filter()
     query_done = models.Decision.objects.filter()
-    users = User.objects.filter()
+    users = User.objects.filter(is_superuser=0)
 
     prices = {t.id : t.price for t in tasks}
     names = {u.id: u.username for u in  users}

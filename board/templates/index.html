@@ -160,7 +160,7 @@
               <br>
             <form action="#" method="POST">
               {% csrf_token %}
-              <input name="flag" placeholder="     SomeSTF{...}">
+              <input name="flag" placeholder="     MephiSTF{...}">
               <button>отправить</button>
               <span>{{msg}}</span>
             </form>
@@ -168,7 +168,6 @@
           {% for val in data %}
             <div style="color:#555555">
               <h2>{{ val.category }}</h2>
-              {{ val.description }}<br>
             </div>
             {% for task in val.tasks %}
               <div class="one_task"
@@ -193,7 +192,7 @@
   <div style="height:100px;"></div>
   <center>
     <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
-      <h1>Мы рады видеть тебя на MephiCTF</h1>
+      <h1>Мы рады видеть тебя на /some</h1>
       <button onclick="window.location = '/login';" style="width: 25%;">Вход</button>
       <button onclick="window.location = '/register';" style="width: 25%;">Регистрация</button>
     </div>
