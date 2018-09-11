@@ -24,6 +24,7 @@
       }
       .top_name_ctf{
         float: left;
+        cursor:pointer
       }
       .margin_maker {
         margin-left: 10px;
@@ -47,13 +48,13 @@
   <body>
     <div class="top_div">
       <div class="margin_maker">
-        <h1 class="top_name_ctf"> SomeCTF</h1>
+        <h1 class="top_name_ctf" onclick="window.location = '/'"> MephiCTF</h1>
       </div>
     </div>
     <div style="height:100px;"></div>
     <center>
       <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
-        <h1>Мы рады видеть тебя на SomeCTF</h1>
+        <h1>Мы рады видеть тебя на MephiCTF</h1>
         <div style="text-align: right; width: 500px; padding-right: 100px;">
           <form action="" method="post">
             {% csrf_token %}

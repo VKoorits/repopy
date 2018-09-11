@@ -25,6 +25,7 @@
       }
       .top_name_ctf{
         float: left;
+        cursor:pointer
       }
       .margin_maker {
         margin-left: 10px;
@@ -112,6 +113,9 @@
       function open_task(obj) {
       document.getElementById('grey_cloud').style.display = 'block';
       document.getElementById(obj.id+'_task').style.display = 'block';
+      function to_main(){
+        window.location = "/"
+      }
     }
     </script>
 
@@ -122,11 +126,13 @@
     <div>
       <div class="top_div">
         <div class="margin_maker">
-          <h1 class="top_name_ctf"> SomeCTF</h1>
+          <h1 class="top_name_ctf" onclick="window.location = '/'"> MephiCTF</h1>
+          <h1 class="top_name_ctf" style="width:20%"></h1>
+          <h1 class="top_name_ctf" onclick="window.location = 'score/'">score board</h1>
         </div>
           <h1>{{user}} | SCORE: {{score}}</h1>
       </div>
-      <div style="z-index: 3;  red;position:fixed; left:0px; top:35px; right:0px;">
+      <div style="z-index: 3;position:fixed; left:0px; top:35px; right:0px;">
         <center>
           {% for val in data %}
             {% for task in val.tasks %}
@@ -149,7 +155,7 @@
               ВВОД ФЛАГА
             </h3>
               Правильным флагом является строка вида
-              <code>SomeCTF{&lt;flag&gt;}</code>, где &lt;flag&gt;
+              <code>MephiCTF{&lt;flag&gt;}</code>, где &lt;flag&gt;
               - набор [a-zA-Zа-яА-Я0-9@_!].
               <br>
             <form action="#" method="POST">
@@ -181,13 +187,13 @@
   {% else %}
   <div class="top_div">
     <div class="margin_maker">
-      <h1 class="top_name_ctf"> SomeCTF</h1>
+      <h1 class="top_name_ctf"> MephiCTF</h1>
     </div>
   </div>
   <div style="height:100px;"></div>
   <center>
     <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
-      <h1>Мы рады видеть тебя на SomeCTF</h1>
+      <h1>Мы рады видеть тебя на MephiCTF</h1>
       <button onclick="window.location = '/login';" style="width: 25%;">Вход</button>
       <button onclick="window.location = '/register';" style="width: 25%;">Регистрация</button>
     </div>

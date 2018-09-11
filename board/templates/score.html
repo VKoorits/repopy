@@ -1,0 +1,100 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>score</title>
+    <style>
+      body {
+        overflow: auto;
+        margin: 0;
+        background-color: #e0e0e0;
+      }
+      .top_div {
+        position: fixed; /* Фиксированное положение */
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        height: 60px;
+        background-color: white;
+        text-align: right;
+        padding-left: : 10px;
+        padding-right: 15px;
+        border-bottom: 2px solid #e0e0e0;
+        z-index: 2;
+      }
+      .top_name_ctf{
+        float: left;
+        cursor:pointer
+      }
+      .margin_maker {
+        margin-left: 10px;
+        margin-right: 15px;
+        margin-top: 0px;
+      }
+      .grey_cloud {
+        position:fixed;
+        top:0px;
+        left:0px;
+        right: 0px;
+        bottom: 0px;
+        z-index: 3;
+        opacity: 0.6;
+     	  background: #444444;
+        display: none;
+      }
+      .score_board {
+        margin-left:auto;
+        margin-right:auto;
+      }
+      .score_board_table {
+        margin:0 auto;
+        background: white;
+        width: 60%;
+        background: #eeeeee;
+      }
+      table {
+        border-collapse: collapse;
+        color: #686461;
+      }
+      td {
+        padding: 5px;
+      }
+      tr:nth-child(odd) {
+        background: #E8E6D1;
+      }
+      tr:nth-child(even) {
+        background: white;
+      }
+    </style>
+</head>
+<body>
+  {% if user.is_authenticated %}
+    <div class="grey_cloud" id="grey_cloud"></div>
+    <div>
+      <div class="top_div">
+        <div class="margin_maker">
+          <h1 class="top_name_ctf" onclick="window.location = '/'"> MephiCTF</h1>
+        </div>
+          <h1>{{user}} | SCORE: {{score}}</h1>
+      </div>
+      <div style="height: 65px;" ></div>
+      <div class="score_board">
+
+
+        <table class="score_board_table">
+          {% for score in score_board %}
+            <tr class="one_result">
+              <td>{{ score.name }} </td><td> {{score.res}} </td>
+            </tr>
+          {% endfor %}
+        </center>
+      </div>
+
+  {% else %}
+  <script>
+    window.location = "/"
+  </script>
+  {% endif %}
+</body>
+</html>
