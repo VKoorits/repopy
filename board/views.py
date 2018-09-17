@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render
 from . import models
 
-
+"""
 class RegisterFormView(FormView):
     form_class = UserCreationForm
     success_url = "/login/"
@@ -16,7 +16,7 @@ class RegisterFormView(FormView):
     def form_valid(self, form):
         form.save()
         return super(RegisterFormView, self).form_valid(form)
-
+"""
 
 class LoginFormView(FormView):
     form_class = AuthenticationForm

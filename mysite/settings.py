@@ -26,6 +26,7 @@ SECRET_KEY = '%2z9rc)(zv3u0hslt%is#jeeu4!y@!twlhq@ym63na5+t$gpf8'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "127.0.0.1",
     "barakuda.pythonanywhere.com"
 ]
 
