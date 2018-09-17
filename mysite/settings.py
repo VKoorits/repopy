@@ -25,7 +25,9 @@ SECRET_KEY = '%2z9rc)(zv3u0hslt%is#jeeu4!y@!twlhq@ym63na5+t$gpf8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "barakuda.pythonanywhere.com"
+]
 
 
 # Application definition
