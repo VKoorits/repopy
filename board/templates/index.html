@@ -22,8 +22,8 @@
             <tr>
             {%for x in diap_x %}
                 <td>
-                    <input name="r{{x}}-{{y}}"> + j*
-                    <input name="i{{x}}-{{y}}"> &nbsp; ; &nbsp;
+                    <input name="r{{x}}-{{y}}" id="r{{x}}-{{y}}"> + j*
+                    <input name="i{{x}}-{{y}}" id="i{{x}}-{{y}}"> &nbsp; ; &nbsp;
                 </td>
             {% endfor %}
             </tr>
@@ -37,5 +37,27 @@
         {{ answer }}
         <br>
     {% endfor %}
+    <script>
+        var params = window
+                    .location
+                    .search
+                    .replace('?','')
+                    .split('&')
+                    .reduce(
+                        function(p,e){
+                            var a = e.split('=');
+                            p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+                            return p;
+                        },
+                        {}
+                    );
+        for(var i=1; i<=params["vector_size"]; i++) {
+            for(var j=1; j<=params["vector_size"]; j++) {
+                var idx = i + "-" + j;
+                document.getElementById('r'+idx).setAttribute("value", params["r"+idx]);
+                document.getElementById('i'+idx).setAttribute("value", params["i"+idx]);
+            }
+        }
+    </script>
 </body>
 </html>
