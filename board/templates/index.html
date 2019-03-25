@@ -2,204 +2,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <title>CTF</title>
     <style>
-      body {
-        overflow: auto;
-        margin: 0;
-        background-color: #e0e0e0;
-      }
-      .top_div {
-        position: fixed; /* Фиксированное положение */
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        height: 60px;
-        background-color: white;
-        text-align: right;
-        padding-left: : 10px;
-        padding-right: 15px;
-        border-bottom: 2px solid #e0e0e0;
-        z-index: 2;
-      }
-      .top_name_ctf{
-        float: left;
-        cursor:pointer
-      }
-      .margin_maker {
-        margin-left: 10px;
-        margin-right: 15px;
-        margin-top: 0px;
-      }
-      .flag_field {
-        position: relative;
-        top: 0px;
-        background-color: white;
-        height: 145px;
-        padding-left: 20px;
-        padding-top: 5px;
-        color: grey;
-      }
-      .tasks {
-        z-index: 1;
-        padding: 0px;
-        position: relative; /* Фиксированное положение */
-        top: 80px;
-        margin-left: 100px;
-        margin-right: 80px;
-        padding: 10px;
-      }
-      .one_task {
-        padding: 10px;
-        margin: 10px;
-        color: #222222;
-        background-color: #f2f2f2;
-        width: 160px;
-        height: 90px;
-        display: inline-block;
-        text-align: center;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .grey_cloud {
-        position:fixed;
-        top:0px;
-        left:0px;
-        right: 0px;
-        bottom: 0px;
-        z-index: 3;
-        opacity: 0.6;
-     	  background: #444444;
-        display: none;
-      }
-      .task_text {
-        padding-top: 15px;
-        padding-left: 50px;
-        padding-right: 50px;
-        background-color: white;
-        border: 2px solid #e0e0e0;
-        width: 550px;
-        height: 350px;
-        z-index: 5;
-        text-align: left;
-        display: none;
-      }
-      hr {
-        color: #333333;
-      }
-      button {
-        background: #81C869;
-        height: 32px;
-        border: 1px;
-        margin: 5px;
-        cursor: pointer;
-      }
-      input {
-        border-radius: 0px;
-        border: 2px solid #e0e0e0;
-        height: 30px;
-      }
-      code {
-        font-size: 18px;
-        background-color: #f0f8ff;
-      }
-    </style>
-    <script>
-      function close_task(obj) {
-          document.getElementById('grey_cloud').style.display = 'none';
-          document.getElementById(obj.id+'task').style.display = 'none';
-        }
-      function open_task(obj) {
-      document.getElementById('grey_cloud').style.display = 'block';
-      document.getElementById(obj.id+'_task').style.display = 'block';
-      function to_main(){
-        window.location = "/"
-      }
+    input {
+        width: 30px
     }
-    </script>
-
+    </style>
 </head>
 <body>
-  {% if user.is_authenticated %}
-    <div class="grey_cloud" id="grey_cloud"></div>
-    <div>
-      <div class="top_div">
-        <div class="margin_maker">
-          <h1 class="top_name_ctf" onclick="window.location = '/'"> MephiCTF</h1>
-          <h1 class="top_name_ctf" style="width:20%"></h1>
-          <h1 class="top_name_ctf" onclick="window.location = 'score/'">score board</h1>
-        </div>
-          <h1>{{user}} | SCORE: {{score}}</h1>
-      </div>
-      <div style="z-index: 3;position:fixed; left:0px; top:35px; right:0px;">
-        <center>
-          {% for val in data %}
-            {% for task in val.tasks %}
-              <div class="task_text" id='{{task.name}}_task'>
-                {{ task.name }}
-                <hr>
-                <div style="height: 250px">
-                  {{ task.text }}
-                </div>
-              <hr>
-              <button style="float:right;" id="{{task.name}}_" onclick="close_task(this)" >закрыть</button>
-            </div>
+    <form>
+        Размер вектора <input name="vector_size" value="{{vector_size}}"><br>
+        <input type="radio" name="axis" value="1" {{checked1}}> 1-мерное<br>
+        <input type="radio" name="axis" value="2" {{checked2}}> 2-мерное<br>
+        ==========<br>
+        <input type="radio" name="type" value="direct" checked="checked"> прямое Фурье
+        <input type="radio" name="type" value="reverse"> обратное Фурье
+        <br>
+        <table>
+        {% for y in diap_y %}
+            <tr>
+            {%for x in diap_x %}
+                <td>
+                    <input name="r{{x}}-{{y}}"> + j*
+                    <input name="i{{x}}-{{y}}"> &nbsp; ; &nbsp;
+                </td>
             {% endfor %}
-          {% endfor %}
-        </center>
-      </div>
-        <div class="tasks">
-          <div class="flag_field">
-            <h3>
-              ВВОД ФЛАГА
-            </h3>
-              Правильным флагом является строка вида
-              <code>MephiCTF{&lt;flag&gt;}</code>, где &lt;flag&gt;
-              - набор [a-zA-Zа-яА-Я0-9@_!].
-              <br>
-            <form action="#" method="POST">
-              {% csrf_token %}
-              <input name="flag" placeholder="     MephiCTF{...}">
-              <button>отправить</button>
-              <span>{{msg}}</span>
-            </form>
-          </div>
-          {% for val in data %}
-            <div style="color:#555555">
-              <h2>{{ val.category }}</h2>
-            </div>
-            {% for task in val.tasks %}
-              <div class="one_task"
-                {% if task.done %}
-                  style="background-color: #81C869;"
-                {% endif %}
-                id='{{task.name}}' onclick="open_task(this);" >
-                <span>{{ task.name }}</span><br>
-                <h2>{{ task.price }}</h2>
-              </div>
-            {% endfor %}
-          {% endfor %}
-          <hr>
-          <center><a href="/logout">Выход</a></center>
-      </div>
-  {% else %}
-  <div class="top_div">
-    <div class="margin_maker">
-      <h1 class="top_name_ctf"> MephiCTF</h1>
-    </div>
-  </div>
-  <div style="height:100px;"></div>
-  <center>
-    <div style="margin-left: 20%; margin-right: 20%;  background-color: white;">
-      <h1>Мы рады видеть тебя на MephiCTF</h1>
-      <button onclick="window.location = '/login';" style="width: 25%;">Вход</button>
-      <!--
-      <button onclick="window.location = '/register';" style="width: 25%;">Регистрация</button>
-      -->
-    </div>
-  </center>
-  <center>
-  {% endif %}
+            </tr>
+        {% endfor %}
+        </table>
+        <br>
+        <input style="width:60px" type="submit" value="calc">
+    </form>
+    <br><br>
+    {% for answer in answers %}
+        {{ answer }}
+        <br>
+    {% endfor %}
 </body>
 </html>

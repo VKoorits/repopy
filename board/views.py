@@ -6,106 +6,89 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.shortcuts import render
 from . import models
+from numpy import fft
+import numpy as np
 
-"""
-class RegisterFormView(FormView):
-    form_class = UserCreationForm
-    success_url = "/login/"
-    template_name = "register.html"
+def get_num(params, key, method=float):
+    res = 0
+    try:
+        if key in params:
+            res = method(params[key])
+    except ValueError:
+        pass
+    return res
 
-    def form_valid(self, form):
-        form.save()
-        return super(RegisterFormView, self).form_valid(form)
-"""
+def get_input(params,  vector_size, diap_x):
+    inp = []
+    for k in diap_x:
+        tmp = []
+        for j in range(1, vector_size+1):
+            r = get_num(params, "r"+str(k)+"-"+str(j))
+            i = get_num(params, "i"+str(k)+"-"+str(j))
+            tmp.append(complex(r, i))
+        inp.append(tmp)
+    if get_num(params, "axis", int) != 2 and len(inp) != 0:
+        inp = inp[0]
+    return inp
 
-class LoginFormView(FormView):
-    form_class = AuthenticationForm
-    template_name = "login.html"
-    success_url = "/"
+def calc_res(params, inp):
+    res = []
+    try:
+        key = str(get_num(params, "axis", int)) + ":" + str(get_num(params, "type", str))
+        method = {
+            "1:direct": fft.fft,
+            "2:direct": fft.fft2,
+            "1:reverse": fft.ifft,
+            "2:reverse": fft.ifft2
+        }[key]
+        res = method(inp)
+    except Exception:
+        pass
+    return res
 
-    def form_valid(self, form):
-        self.user = form.get_user()
-        login(self.request, self.user)
-        return super(LoginFormView, self).form_valid(form)
 
+def print_line(line):
+    res = "["
+    for i in line:
+        res += str(i)+ ", "
+    res += "]"
+    return res
 
-class LogoutView(View):
-    def get(self, request):
-        logout(request)
-        return HttpResponseRedirect("/")
+def render_res(res):
+    print("======")
+    print(len(res))
+    print(res)
+    empty_arr = np.zeros((1,1))
+    if len(res) > 0 and type(res[0]) == type(empty_arr):
+        ans = []
+        for i in res:
+            print(i)
+            ans.append(print_line(i))
+        return ans
 
-
+    return [print_line(res)]
 
 def main_page(request):
-	msg=""
-	
-	if "flag" in request.POST:
-		query = models.Task.objects.filter(flag=request.POST['flag'])
-		if len(query)==1:
-			msg = "Да, верно!"
-			t_id = query[0].id
-			u_id = request.user.id
-			decision = models.Decision.objects.filter(user_id=u_id, task_id=t_id)
-			if len(decision) == 1:
-				msg = "Это задание уже сделано!"
-			else:
-				models.Decision.objects.create(user_id=u_id, task_id=t_id)
-		else:
-			msg = "Неверно, попробуй ещё разок"
+    params = request.GET
+    vector_size = get_num(params, 'vector_size', method=int)
 
-	
-	tasks = []
-	
-	sort_list=['category', 'price']
-	query_task = models.Task.objects.order_by(*sort_list)
-	
-	query_done = models.Decision.objects.filter(user_id=request.user.id)
-	
-	
-	this_category = ""
-	score = 0
-	for task in query_task:
-		if this_category != task.category:
-			this_category = task.category
-			tasks.append({
-				"category" : this_category,
-				"description" : "TODO: description",
-				"tasks":[] 
-				})
-		
-		done = False
-		for t in query_done:
-			if t.task_id == task.id:
-				done = True
-				score += task.price
-				break
-		tasks[-1]['tasks'].append({
-				"name" : task.task_name,
-				"price": task.price,
-				"text" : task.description,
-				"done" : done
-				})
-    
-	return render(request, 'index.html', {"data" : tasks, "user":request.user, "msg":msg, "score":score}) 
+    diap_x = [1]
+    checked2 = ""
+    if get_num(params, "axis", int) == 2:
+        diap_x = list(range(1,vector_size+1))
+        checked2 = "checked='checked'"
 
+    inp = get_input(params, vector_size, diap_x)
+    res = calc_res(params, inp)
+    answers = render_res(res)
+    print(answers)
 
-def score_page(request):
-    tasks = models.Task.objects.filter()
-    query_done = models.Decision.objects.filter()
-    users = User.objects.filter(is_superuser=0)
-
-    prices = {t.id : t.price for t in tasks}
-    names = {u.id: u.username for u in  users}
-    results = {}
-
-    for done in  query_done:
-       results[done.user_id] = results.get(done.user_id, 0) + prices.get(done.task_id, 0)
-
-    score_board = [[results.get(u.id, 0), names[u.id]]  for u in users]
-    score_noard = score_board.sort()
-    score_board.reverse()
-    for i in range(len(score_board)):
-        score_board[i] = {"res" : score_board[i][0], "name" : score_board[i][1] }
-    print(score_board)
-    this_score = results.get(request.user.id, 0)
-    return render(request, 'score.html', {"score_board" : score_board, "user":request.user, "score":this_score})
+    return render(request, 'index.html',
+        {
+            "diap_y": list(range(1, vector_size+1)),
+            "diap_x": diap_x,
+            "checked1": "checked='checked'",
+            "checked2": checked2,
+            "answers": answers,
+            "vector_size": vector_size
+        })
